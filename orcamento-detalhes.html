@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orçamento - Detalhes</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="pagina-detalhes">
+
+  <div class="barra-acoes">
+    <button class="btn-imprimir" onclick="window.print()">Imprimir</button>
+    <a href="home.html" class="btn-voltar">&#8592; Voltar</a>
+  </div>
+
+  <div class="area-impressao">
+    <div class="folha" id="folha">
+      <p class="doc-carregando">Carregando orçamento...</p>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/login.js"></script>
+  <script src="js/orcamento-detalhes.js"></script>
+</body>
+</html>
