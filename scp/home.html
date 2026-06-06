@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SRP</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+</head>
+<body class="pagina-interna">
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">SRP</div>
+
+    <nav class="sidebar-nav">
+      <a href="#" class="sidebar-link ativo" onclick="mostrarSecao('inicio', this)">Início</a>
+      <a href="#" class="sidebar-link" onclick="mostrarSecao('clientes', this)">Clientes</a>
+      <a href="#" class="sidebar-link" onclick="mostrarSecao('categorias', this)">Categorias</a>
+      <a href="#" class="sidebar-link" onclick="mostrarSecao('produtos', this)">Produtos</a>
+      <a href="#" class="sidebar-link" onclick="mostrarSecao('orcamentos', this)">Orçamentos</a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a href="index.html" class="sidebar-link sidebar-link-sair">Sair</a>
+    </div>
+  </aside>
+
+  <main class="conteudo-principal">
+
+    <section id="secao-inicio" class="secao">
+      <h1>Bem-vindo ao SRP</h1>
+    </section>
+
+    <section id="secao-clientes" class="secao secao-oculta">
+      <h1>Clientes</h1>
+
+      <form id="formCliente" class="form-cadastro">
+
+        <div class="form-linha">
+          <div class="form-grupo">
+            <label for="tipoCliente">Tipo</label>
+            <select id="tipoCliente">
+              <option value="">Selecione</option>
+              <option value="F">Pessoa Física</option>
+              <option value="J">Pessoa Jurídica</option>
+            </select>
+          </div>
+
+          <div class="form-grupo">
+            <label for="cpfCnpjCliente">CPF / CNPJ</label>
+            <input type="text" id="cpfCnpjCliente" placeholder="Selecione o tipo de cliente" maxlength="18" />
+          </div>
+        </div>
+
+        <div class="form-linha">
+          <div class="form-grupo form-grupo-largo">
+            <label for="nomeCliente">Nome</label>
+            <input type="text" id="nomeCliente" placeholder="Nome completo ou razão social" maxlength="100" />
+          </div>
+        </div>
+
+        <p id="mensagemCliente" class="mensagem-erro"></p>
+
+        <div class="form-acoes">
+          <button type="submit" class="btn-primary btn-salvar">Salvar</button>
+        </div>
+
+      </form>
+
+      <table class="tabela-dados" id="tabelaClientes">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Tipo</th>
+            <th>CPF / CNPJ</th>
+            <th>Nome</th>
+          </tr>
+        </thead>
+        <tbody id="corpoTabelaClientes"></tbody>
+      </table>
+
+    </section>
+
+    <section id="secao-categorias" class="secao secao-oculta">
+      <h1>Categorias</h1>
+
+      <form id="formCategoria" class="form-cadastro">
+
+        <div class="form-linha">
+          <div class="form-grupo">
+            <label for="idCategoria">Código</label>
+            <input type="number" id="idCategoria" placeholder="Código da categoria" min="1" />
+          </div>
+
+          <div class="form-grupo form-grupo-largo">
+            <label for="descricaoCategoria">Descrição</label>
+            <input type="text" id="descricaoCategoria" placeholder="Descrição da categoria" maxlength="50" />
+          </div>
+        </div>
+
+        <p id="mensagemCategoria" class="mensagem-erro"></p>
+
+        <div class="form-acoes">
+          <button type="submit" class="btn-primary btn-salvar">Salvar</button>
+        </div>
+
+      </form>
+
+      <div class="form-cadastro">
+        <div class="form-linha">
+          <div class="form-grupo">
+            <label for="idCategoriaExcluir">ID da Categoria</label>
+            <input type="number" id="idCategoriaExcluir" placeholder="ID da categoria" min="1" />
+          </div>
+        </div>
+        <p id="mensagemExclusaoCategoria" class="mensagem-erro"></p>
+        <div class="form-acoes">
+          <button type="button" class="btn-excluir btn-salvar" onclick="excluirCategoria()">Excluir Categoria</button>
+        </div>
+      </div>
+
+      <table class="tabela-dados" id="tabelaCategorias">
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Descrição</th>
+          </tr>
+        </thead>
+        <tbody id="corpoTabelaCategorias"></tbody>
+      </table>
+
+    </section>
+
+    <section id="secao-produtos" class="secao secao-oculta">
+      <h1>Produtos</h1>
+
+      <form id="formProduto" class="form-cadastro">
+
+        <div class="form-linha">
+          <div class="form-grupo form-grupo-largo">
+            <label for="categoriaProduto">Categoria</label>
+            <select id="categoriaProduto">
+              <option value="">Selecione</option>
+            </select>
+          </div>
+
+          <div class="form-grupo">
+            <label for="statusProduto">Status</label>
+            <select id="statusProduto">
+              <option value="">Selecione</option>
+              <option value="A">Ativo</option>
+              <option value="I">Inativo</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-linha">
+          <div class="form-grupo form-grupo-largo">
+            <label for="descricaoProduto">Descrição</label>
+            <input type="text" id="descricaoProduto" placeholder="Descrição do produto" maxlength="100" />
+          </div>
+
+          <div class="form-grupo">
+            <label for="valorVenda">Valor de Venda (R$)</label>
+            <input type="number" id="valorVenda" placeholder="0,00" min="0" step="0.01" />
+          </div>
+        </div>
+
+        <div class="form-linha">
+          <div class="form-grupo form-grupo-largo">
+            <label for="observacaoProduto">Observação</label>
+            <input type="text" id="observacaoProduto" placeholder="Observação (opcional)" maxlength="200" />
+          </div>
+
+          <div class="form-grupo">
+            <label for="dataCadastroProduto">Data de Cadastro</label>
+            <input type="text" id="dataCadastroProduto" placeholder="dd/mm/aaaa" readonly />
+          </div>
+        </div>
+
+        <p id="mensagemProduto" class="mensagem-erro"></p>
+
+        <div class="form-acoes">
+          <button type="submit" id="btnSalvarProduto" class="btn-primary btn-salvar">Salvar</button>
+          <button type="button" id="btnCancelarProduto" class="btn-secundario elemento-oculto" onclick="cancelarEdicaoProduto()">Cancelar</button>
+        </div>
+
+      </form>
+
+      <table class="tabela-dados">
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Categoria</th>
+            <th>Descrição</th>
+            <th>Valor</th>
+            <th>Data</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="corpoTabelaProdutos"></tbody>
+      </table>
+
+    </section>
+
+    <section id="secao-orcamentos" class="secao secao-oculta">
+      <h1>Orçamentos</h1>
+
+      <div class="orcamento-layout">
+
+        <!-- Coluna esquerda: Dados + Adicionar Item -->
+        <div class="orcamento-esquerda">
+
+          <!-- Bloco 1: Dados do Orçamento -->
+          <div class="bloco-orcamento">
+            <h2 class="bloco-titulo">Dados do Orçamento</h2>
+
+            <div class="form-cadastro">
+
+              <div class="form-linha">
+                <div class="form-grupo form-grupo-largo">
+                  <label for="clienteOrcamento">Cliente</label>
+                  <select id="clienteOrcamento">
+                    <option value="">Selecione</option>
+                  </select>
+                </div>
+
+                <div class="form-grupo">
+                  <label>Código</label>
+                  <input type="text" id="codigoOrcamento" class="input-readonly-display" readonly placeholder="Automático" />
+                </div>
+              </div>
+
+              <div class="form-linha">
+                <div class="form-grupo">
+                  <label for="dataOrcamento">Data do Orçamento</label>
+                  <input type="text" id="dataOrcamento" placeholder="dd/mm/aaaa" readonly />
+                </div>
+
+                <div class="form-grupo">
+                  <label for="dataValidade">Data de Validade</label>
+                  <input type="text" id="dataValidade" placeholder="dd/mm/aaaa" readonly />
+                </div>
+              </div>
+
+              <p id="mensagemOrcamento" class="mensagem-erro"></p>
+
+            </div>
+          </div>
+
+          <!-- Bloco 2: Adicionar Item -->
+          <div class="bloco-orcamento">
+            <h2 class="bloco-titulo">Adicionar Item</h2>
+
+            <div class="form-cadastro">
+
+              <div class="form-linha">
+                <div class="form-grupo form-grupo-largo">
+                  <label for="produtoOrcamento">Produto</label>
+                  <select id="produtoOrcamento">
+                    <option value="">Selecione um produto</option>
+                  </select>
+                </div>
+
+                <div class="form-grupo">
+                  <label for="quantidadeItem">Quantidade</label>
+                  <input type="number" id="quantidadeItem" placeholder="0" min="1" step="1" />
+                </div>
+              </div>
+
+              <div class="form-linha">
+                <div class="form-grupo form-grupo-largo">
+                  <label for="descricaoItemOrc">Descrição</label>
+                  <input type="text" id="descricaoItemOrc" class="input-readonly-display" readonly placeholder="—" />
+                </div>
+
+                <div class="form-grupo">
+                  <label for="valorUnitarioItem">Valor Unitário</label>
+                  <input type="text" id="valorUnitarioItem" class="input-readonly-display" readonly placeholder="—" />
+                </div>
+
+                <div class="form-grupo">
+                  <label for="valorTotalItemOrc">Total do Item</label>
+                  <input type="text" id="valorTotalItemOrc" class="input-readonly-display" readonly placeholder="—" />
+                </div>
+              </div>
+
+              <div class="form-acoes">
+                <button type="button" class="btn-primary btn-salvar" onclick="adicionarItem()">Adicionar Item</button>
+              </div>
+
+            </div>
+          </div>
+
+        </div><!-- /orcamento-esquerda -->
+
+        <!-- Coluna direita: Itens do Orçamento + Lista -->
+        <div class="orcamento-direita">
+
+          <div class="bloco-orcamento">
+            <h2 class="bloco-titulo">Itens do Orçamento</h2>
+
+            <table class="tabela-dados tabela-itens-orc">
+              <thead>
+                <tr>
+                  <th>Produto</th>
+                  <th>Descrição</th>
+                  <th>Qtd</th>
+                  <th>Valor Unitário</th>
+                  <th>Valor Total</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="corpoTabelaItens"></tbody>
+              <tfoot>
+                <tr class="tfoot-total-row">
+                  <td colspan="3"></td>
+                  <td class="tfoot-label">Valor Total do Orçamento</td>
+                  <td id="valorTotalOrcamento" class="tfoot-total">R$ 0,00</td>
+                  <td></td>
+                </tr>
+              </tfoot>
+            </table>
+
+            <div class="form-acoes orcamento-acoes-salvar">
+              <button type="button" class="btn-secundario btn-salvar" onclick="toggleListaOrcamentos()">Exibir Orçamentos</button>
+              <button type="button" class="btn-primary btn-salvar" onclick="salvarOrcamento()">Salvar Orçamento</button>
+            </div>
+          </div>
+
+          <!-- Lista de Orçamentos Cadastrados -->
+          <div id="blocoListaOrcamentos" class="bloco-orcamento bloco-lista-orcamentos elemento-oculto">
+            <h2 class="bloco-titulo">Orçamentos Cadastrados</h2>
+            <div class="tabela-lista-orc-wrapper">
+              <table class="tabela-dados tabela-lista-orc">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Cliente</th>
+                    <th>Data</th>
+                    <th>Validade</th>
+                    <th>Valor Total</th>
+                  </tr>
+                </thead>
+                <tbody id="corpoListaOrcamentos">
+                  <tr><td colspan="5" class="tabela-vazia">Carregando...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div><!-- /orcamento-direita -->
+
+    </section>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script>
+  <script src="js/login.js"></script>
+  <script src="js/home.js"></script>
+  <script src="js/clientes.js"></script>
+  <script src="js/categorias.js"></script>
+  <script src="js/produtos.js"></script>
+  <script src="js/orcamentos.js"></script>
+</body>
+</html>

@@ -1,0 +1,488 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #fff;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 60px;
+  padding: 60px 40px;
+}
+
+.login-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 360px;
+}
+
+.login-card h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+}
+
+.form-group {
+  position: relative;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  color: #333;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+  border-color: #4a0080;
+}
+
+.password-group input {
+  padding-right: 44px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #888;
+  display: flex;
+  align-items: center;
+}
+
+.toggle-password svg {
+  width: 20px;
+  height: 20px;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 16px;
+  background-color: #3d007a;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 4px;
+}
+
+.btn-primary:hover {
+  background-color: #2a0055;
+}
+
+.mensagem-erro {
+  font-size: 0.875rem;
+  color: #c0392b;
+  min-height: 1.2rem;
+}
+
+/* =====================================================
+   LAYOUT INTERNO (páginas após o login)
+   ===================================================== */
+
+body.pagina-interna {
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-start;
+  background: #f4f4f7;
+}
+
+.sidebar {
+  width: 220px;
+  min-height: 100vh;
+  background-color: #3d007a;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.sidebar-logo {
+  color: #fff;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding: 0 24px 32px 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  margin-top: 16px;
+  flex: 1;
+}
+
+.sidebar-link {
+  color: rgba(255,255,255,0.8);
+  text-decoration: none;
+  font-size: 0.95rem;
+  padding: 12px 24px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.sidebar-link:hover {
+  background-color: rgba(255,255,255,0.1);
+  color: #fff;
+}
+
+.sidebar-link.ativo {
+  background-color: rgba(255,255,255,0.15);
+  color: #fff;
+  font-weight: 700;
+}
+
+.sidebar-footer {
+  padding-top: 16px;
+  border-top: 1px solid rgba(255,255,255,0.15);
+}
+
+.sidebar-link-sair {
+  color: rgba(255,255,255,0.5);
+}
+
+.sidebar-link-sair:hover {
+  color: #fff;
+}
+
+.conteudo-principal {
+  margin-left: 220px;
+  padding: 40px;
+  flex: 1;
+}
+
+.secao-oculta {
+  display: none;
+}
+
+/* =====================================================
+   FORMULÁRIOS DE CADASTRO
+   ===================================================== */
+
+.conteudo-principal h1 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 24px;
+}
+
+.form-cadastro {
+  background: #fff;
+  border-radius: 6px;
+  padding: 24px;
+  margin-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 760px;
+}
+
+.form-linha {
+  display: flex;
+  gap: 16px;
+}
+
+.form-grupo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+
+.form-grupo-largo {
+  flex: 2;
+}
+
+.form-grupo label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #444;
+}
+
+.form-grupo input,
+.form-grupo select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  color: #333;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-grupo input:focus,
+.form-grupo select:focus {
+  border-color: #4a0080;
+}
+
+.campo-invalido {
+  border-color: #c0392b !important;
+  background-color: #fff5f5;
+  outline: none;
+}
+
+.form-acoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+/* =====================================================
+   TABELA DE DADOS
+   ===================================================== */
+
+.tabela-dados {
+  width: 100%;
+  max-width: 760px;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+  font-size: 0.9rem;
+}
+
+.tabela-dados thead {
+  background-color: #3d007a;
+  color: #fff;
+}
+
+.tabela-dados th,
+.tabela-dados td {
+  padding: 10px 14px;
+  text-align: left;
+}
+
+.tabela-dados tbody tr:nth-child(even) {
+  background-color: #f4f0f9;
+}
+
+.tabela-dados tbody tr:hover {
+  background-color: #ede6f7;
+}
+
+.acoes-tabela {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.btn-editar,
+.btn-excluir {
+  padding: 5px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.form-acoes .btn-excluir {
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 10px 32px;
+}
+
+.btn-editar {
+  background-color: #4a0080;
+  color: #fff;
+}
+
+.btn-editar:hover {
+  background-color: #3d007a;
+}
+
+.btn-excluir {
+  background-color: #c0392b;
+  color: #fff;
+}
+
+.btn-excluir:hover {
+  background-color: #a93226;
+}
+
+.btn-salvar {
+  width: auto;
+  min-width: 130px;
+  padding: 10px 32px;
+  border: 2px solid transparent;
+  margin-top: 0;
+}
+
+.btn-secundario {
+  padding: 10px 32px;
+  background-color: #fff;
+  color: #3d007a;
+  font-size: 1rem;
+  font-weight: 700;
+  border: 2px solid #3d007a;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+  min-width: 130px;
+  width: auto;
+}
+
+.btn-secundario:hover {
+  background-color: #f4f0f9;
+}
+
+.elemento-oculto {
+  display: none;
+}
+
+.flatpickr-input {
+  cursor: pointer;
+}
+
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.badge-ativo {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.badge-inativo {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+/* =====================================================
+   ORÇAMENTOS
+   ===================================================== */
+
+.orcamento-layout {
+  display: grid;
+  grid-template-columns: 440px 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+.orcamento-esquerda {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.orcamento-esquerda .form-cadastro {
+  width: 100%;
+  max-width: 100%;
+}
+
+.orcamento-direita {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 1200px) {
+  .orcamento-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.bloco-orcamento {
+  margin-bottom: 8px;
+}
+
+.bloco-titulo {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #3d007a;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #ede6f7;
+}
+
+.input-readonly-display {
+  background-color: #f9f9f9;
+  color: #555;
+  cursor: default;
+}
+
+.input-valor-total {
+  background-color: #f4f0f9;
+  color: #3d007a;
+  font-weight: 700;
+  cursor: default;
+}
+
+.tabela-itens-orc {
+  max-width: 100%;
+  width: 100%;
+}
+
+.tabela-itens-orc tfoot td {
+  padding: 12px 14px;
+  background-color: #f4f0f9;
+}
+
+.tfoot-label {
+  text-align: right;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.tfoot-total {
+  font-weight: 700;
+  color: #3d007a;
+  font-size: 1rem;
+}
+
+.tabela-vazia {
+  text-align: center;
+  color: #888;
+  font-style: italic;
+  padding: 24px 14px !important;
+}
+
+.orcamento-acoes-salvar {
+  max-width: 100%;
+  margin-top: 16px;
+}
+
+.bloco-lista-orcamentos {
+  margin-top: 16px;
+}
+
+.tabela-lista-orc-wrapper {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.tabela-lista-orc {
+  width: 100%;
+  max-width: 100%;
+}
