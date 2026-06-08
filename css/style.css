@@ -127,12 +127,15 @@ body.pagina-interna {
 }
 
 .sidebar-logo {
-  color: #fff;
-  font-size: 1.4rem;
-  font-weight: 700;
-  letter-spacing: 2px;
-  padding: 0 24px 32px 24px;
   border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+
+.sidebar-logo-img {
+  width: 100%;
+  max-width: 160px;
+  display: block;
+  margin: 0 auto;
+  filter: brightness(0) invert(1);
 }
 
 .sidebar-nav {
@@ -574,6 +577,148 @@ body.pagina-interna {
 
 @media (max-width: 480px) {
   .dashboard-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== DASHBOARD PRODUTOS ===== */
+
+.dashboard-produtos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.produto-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+  overflow: hidden;
+}
+
+.produto-card-cabecalho {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.95rem;
+  text-align: left;
+  gap: 12px;
+  transition: filter 0.2s;
+}
+
+.produto-card-cabecalho:hover {
+  filter: brightness(0.96);
+}
+
+.produto-card-ativos .produto-card-cabecalho {
+  background: #e8f8f0;
+  color: #1e8449;
+}
+
+.produto-card-inativos .produto-card-cabecalho {
+  background: #fdecea;
+  color: #a93226;
+}
+
+.produto-card-titulo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 700;
+}
+
+.produto-card-count {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 2px 10px;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.produto-card-seta {
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.produto-card-corpo {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.produto-card-corpo.expandido {
+  max-height: 600px;
+}
+
+.produto-card-inner {
+  padding: 4px 20px 16px;
+}
+
+.produto-card-tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  margin-top: 8px;
+}
+
+.produto-card-tabela thead th {
+  text-align: left;
+  padding: 8px 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid #ede6f7;
+}
+
+.produto-card-tabela tbody td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #f4f0f9;
+  color: #333;
+}
+
+.produto-card-tabela tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.produto-card-vazio {
+  text-align: center;
+  color: #888;
+  font-style: italic;
+  padding: 20px 0;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.btn-ver-todos {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  padding: 8px;
+  background: #f4f0f9;
+  color: #3d007a;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background-color 0.2s;
+}
+
+.btn-ver-todos:hover {
+  background: #ede6f7;
+}
+
+@media (max-width: 767px) {
+  .dashboard-produtos {
     grid-template-columns: 1fr;
   }
 }

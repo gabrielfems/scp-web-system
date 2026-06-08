@@ -383,7 +383,7 @@ async function toggleListaOrcamentos() {
 
 async function carregarListaOrcamentos() {
   corpoListaOrcamentos.innerHTML =
-    '<tr><td colspan="5" class="tabela-vazia">Carregando...</td></tr>';
+    '<tr><td colspan="6" class="tabela-vazia">Carregando...</td></tr>';
 
   const { data, error } = await supabaseClient
     .from('orcamento')
@@ -392,7 +392,7 @@ async function carregarListaOrcamentos() {
 
   if (error) {
     corpoListaOrcamentos.innerHTML =
-      '<tr><td colspan="5" class="tabela-vazia">Erro ao carregar orçamentos.</td></tr>';
+      '<tr><td colspan="6" class="tabela-vazia">Erro ao carregar orçamentos.</td></tr>';
     return;
   }
 
@@ -405,7 +405,7 @@ function renderizarListaOrcamentos(lista) {
 
   if (!lista || lista.length === 0) {
     const tr = document.createElement('tr');
-    tr.innerHTML = '<td colspan="5" class="tabela-vazia">Nenhum orçamento cadastrado.</td>';
+    tr.innerHTML = '<td colspan="6" class="tabela-vazia">Nenhum orçamento cadastrado.</td>';
     corpoListaOrcamentos.appendChild(tr);
     return;
   }
@@ -427,9 +427,17 @@ function renderizarListaOrcamentos(lista) {
       '<td>' + (orc.cliente ? orc.cliente.nome_cliente : '—') + '</td>' +
       '<td>' + dtOrc + '</td>' +
       '<td>' + dtVal + '</td>' +
-      '<td>' + vlTotal + '</td>';
+      '<td>' + vlTotal + '</td>' +
+      '<td class="acoes-tabela">' +
+        '<button class="btn-editar" onclick="visualizarOrcamento(' + orc.orcamentoid + ')">Visualizar</button>' +
+      '</td>';
     corpoListaOrcamentos.appendChild(tr);
   });
+}
+
+function visualizarOrcamento(id) {
+  localStorage.setItem('orcamentoSelecionadoId', id);
+  window.location.href = 'orcamento-detalhes.html';
 }
 
 /*

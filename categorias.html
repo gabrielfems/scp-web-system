@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SCP – Categorias</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="pagina-interna">
+
+  <div class="topbar-mobile">
+    <button class="btn-hamburger" onclick="toggleSidebar()" aria-label="Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <span class="topbar-titulo">SCP</span>
+  </div>
+
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="fecharSidebar()"></div>
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="assets/logo.png" alt="SCP - Sistema de Orçamentos" class="sidebar-logo-img" />
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="home.html" class="sidebar-link">Início</a>
+      <a href="clientes.html" class="sidebar-link">Clientes</a>
+      <a href="categorias.html" class="sidebar-link ativo">Categorias</a>
+      <a href="produtos.html" class="sidebar-link">Produtos</a>
+      <a href="orcamentos.html" class="sidebar-link">Orçamentos</a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a href="index.html" class="sidebar-link sidebar-link-sair">Sair</a>
+    </div>
+  </aside>
+
+  <main class="conteudo-principal">
+
+    <section id="secao-categorias" class="secao">
+      <h1>Categorias</h1>
+
+      <form id="formCategoria" class="form-cadastro">
+
+        <div class="form-linha">
+          <div class="form-grupo">
+            <label for="idCategoria">Código</label>
+            <input type="number" id="idCategoria" placeholder="Código da categoria" min="1" />
+          </div>
+
+          <div class="form-grupo form-grupo-largo">
+            <label for="descricaoCategoria">Descrição</label>
+            <input type="text" id="descricaoCategoria" placeholder="Descrição da categoria" maxlength="50" />
+          </div>
+        </div>
+
+        <p id="mensagemCategoria" class="mensagem-erro"></p>
+
+        <div class="form-acoes">
+          <button type="submit" class="btn-primary btn-salvar">Salvar</button>
+        </div>
+
+      </form>
+
+      <div class="form-cadastro">
+        <div class="form-linha">
+          <div class="form-grupo">
+            <label for="idCategoriaExcluir">ID da Categoria</label>
+            <input type="number" id="idCategoriaExcluir" placeholder="ID da categoria" min="1" />
+          </div>
+        </div>
+        <p id="mensagemExclusaoCategoria" class="mensagem-erro"></p>
+        <div class="form-acoes">
+          <button type="button" class="btn-excluir btn-salvar" onclick="excluirCategoria()">Excluir Categoria</button>
+        </div>
+      </div>
+
+      <div class="tabela-wrapper">
+        <table class="tabela-dados" id="tabelaCategorias">
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Descrição</th>
+            </tr>
+          </thead>
+          <tbody id="corpoTabelaCategorias"></tbody>
+        </table>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/login.js"></script>
+  <script src="js/categorias.js"></script>
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.querySelector('.sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      const aberta = sidebar.classList.toggle('aberta');
+      overlay.classList.toggle('visivel', aberta);
+    }
+    function fecharSidebar() {
+      const sidebar = document.querySelector('.sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      sidebar.classList.remove('aberta');
+      overlay.classList.remove('visivel');
+    }
+  </script>
+</body>
+</html>

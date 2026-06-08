@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SCP – Orçamentos</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+</head>
+<body class="pagina-interna">
+
+  <div class="topbar-mobile">
+    <button class="btn-hamburger" onclick="toggleSidebar()" aria-label="Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <span class="topbar-titulo">SCP</span>
+  </div>
+
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="fecharSidebar()"></div>
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="assets/logo.png" alt="SCP - Sistema de Orçamentos" class="sidebar-logo-img" />
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="home.html" class="sidebar-link">Início</a>
+      <a href="clientes.html" class="sidebar-link">Clientes</a>
+      <a href="categorias.html" class="sidebar-link">Categorias</a>
+      <a href="produtos.html" class="sidebar-link">Produtos</a>
+      <a href="orcamentos.html" class="sidebar-link ativo">Orçamentos</a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a href="index.html" class="sidebar-link sidebar-link-sair">Sair</a>
+    </div>
+  </aside>
+
+  <main class="conteudo-principal">
+
+    <section id="secao-orcamentos" class="secao">
+      <h1>Orçamentos</h1>
+
+      <div class="orcamento-layout">
+
+        <!-- Coluna esquerda: Dados + Adicionar Item -->
+        <div class="orcamento-esquerda">
+
+          <!-- Bloco 1: Dados do Orçamento -->
+          <div class="bloco-orcamento">
+            <h2 class="bloco-titulo">Dados do Orçamento</h2>
+
+            <div class="form-cadastro">
+
+              <div class="form-linha">
+                <div class="form-grupo form-grupo-largo">
+                  <label for="clienteOrcamento">Cliente</label>
+                  <select id="clienteOrcamento">
+                    <option value="">Selecione</option>
+                  </select>
+                </div>
+
+                <div class="form-grupo">
+                  <label>Código</label>
+                  <input type="text" id="codigoOrcamento" class="input-readonly-display" readonly placeholder="Automático" />
+                </div>
+              </div>
+
+              <div class="form-linha">
+                <div class="form-grupo">
+                  <label for="dataOrcamento">Data do Orçamento</label>
+                  <input type="text" id="dataOrcamento" placeholder="dd/mm/aaaa" readonly />
+                </div>
+
+                <div class="form-grupo">
+                  <label for="dataValidade">Data de Validade</label>
+                  <input type="text" id="dataValidade" placeholder="dd/mm/aaaa" readonly />
+                </div>
+              </div>
+
+              <p id="mensagemOrcamento" class="mensagem-erro"></p>
+
+            </div>
+          </div>
+
+          <!-- Bloco 2: Adicionar Item -->
+          <div class="bloco-orcamento">
+            <h2 class="bloco-titulo">Adicionar Item</h2>
+
+            <div class="form-cadastro">
+
+              <div class="form-linha">
+                <div class="form-grupo form-grupo-largo">
+                  <label for="produtoOrcamento">Produto</label>
+                  <select id="produtoOrcamento">
+                    <option value="">Selecione um produto</option>
+                  </select>
+                </div>
+
+                <div class="form-grupo">
+                  <label for="quantidadeItem">Quantidade</label>
+                  <input type="number" id="quantidadeItem" placeholder="0" min="1" step="1" />
+                </div>
+              </div>
+
+              <div class="form-linha">
+                <div class="form-grupo form-grupo-largo">
+                  <label for="descricaoItemOrc">Descrição</label>
+                  <input type="text" id="descricaoItemOrc" class="input-readonly-display" readonly placeholder="—" />
+                </div>
+
+                <div class="form-grupo">
+                  <label for="valorUnitarioItem">Valor Unitário</label>
+                  <input type="text" id="valorUnitarioItem" class="input-readonly-display" readonly placeholder="—" />
+                </div>
+
+                <div class="form-grupo">
+                  <label for="valorTotalItemOrc">Total do Item</label>
+                  <input type="text" id="valorTotalItemOrc" class="input-readonly-display" readonly placeholder="—" />
+                </div>
+              </div>
+
+              <div class="form-acoes">
+                <button type="button" class="btn-primary btn-salvar" onclick="adicionarItem()">Adicionar Item</button>
+              </div>
+
+            </div>
+          </div>
+
+        </div><!-- /orcamento-esquerda -->
+
+        <!-- Coluna direita: Itens do Orçamento + Lista -->
+        <div class="orcamento-direita">
+
+          <div class="bloco-orcamento">
+            <h2 class="bloco-titulo">Itens do Orçamento</h2>
+
+            <div class="tabela-wrapper">
+              <table class="tabela-dados tabela-itens-orc">
+                <thead>
+                  <tr>
+                    <th>Produto</th>
+                    <th>Descrição</th>
+                    <th>Qtd</th>
+                    <th>Valor Unitário</th>
+                    <th>Valor Total</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="corpoTabelaItens"></tbody>
+                <tfoot>
+                  <tr class="tfoot-total-row">
+                    <td colspan="3"></td>
+                    <td class="tfoot-label">Valor Total do Orçamento</td>
+                    <td id="valorTotalOrcamento" class="tfoot-total">R$ 0,00</td>
+                    <td></td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+
+            <div class="form-acoes orcamento-acoes-salvar">
+              <button type="button" class="btn-secundario btn-salvar" onclick="toggleListaOrcamentos()">Exibir Orçamentos</button>
+              <button type="button" class="btn-primary btn-salvar" onclick="salvarOrcamento()">Salvar Orçamento</button>
+            </div>
+          </div>
+
+          <!-- Lista de Orçamentos Cadastrados -->
+          <div id="blocoListaOrcamentos" class="bloco-orcamento bloco-lista-orcamentos elemento-oculto">
+            <h2 class="bloco-titulo">Orçamentos Cadastrados</h2>
+            <div class="tabela-lista-orc-wrapper">
+              <table class="tabela-dados tabela-lista-orc">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Cliente</th>
+                    <th>Data</th>
+                    <th>Validade</th>
+                    <th>Valor Total</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="corpoListaOrcamentos">
+                  <tr><td colspan="6" class="tabela-vazia">Carregando...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div><!-- /orcamento-direita -->
+
+      </div><!-- /orcamento-layout -->
+
+    </section>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script>
+  <script src="js/login.js"></script>
+  <script src="js/orcamentos.js"></script>
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.querySelector('.sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      const aberta = sidebar.classList.toggle('aberta');
+      overlay.classList.toggle('visivel', aberta);
+    }
+    function fecharSidebar() {
+      const sidebar = document.querySelector('.sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      sidebar.classList.remove('aberta');
+      overlay.classList.remove('visivel');
+    }
+  </script>
+</body>
+</html>
