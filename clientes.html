@@ -40,53 +40,66 @@
   <main class="conteudo-principal">
 
     <section id="secao-clientes" class="secao">
-      <h1>Cadastro de CLientes</h1>
+      <h1>Cadastro de Clientes</h1>
 
-      <form id="formCliente" class="form-cadastro">
+      <form id="formCliente" class="form-cadastro form-linha-unica">
 
-        <div class="form-linha">
-          <div class="form-grupo">
-            <label for="tipoCliente">Tipo</label>
-            <select id="tipoCliente">
-              <option value="">Selecione</option>
-              <option value="F">Pessoa Física</option>
-              <option value="J">Pessoa Jurídica</option>
-            </select>
-          </div>
-
-          <div class="form-grupo">
-            <label for="cpfCnpjCliente">CPF / CNPJ</label>
-            <input type="text" id="cpfCnpjCliente" placeholder="Selecione o tipo de cliente" maxlength="18" />
-          </div>
+        <div class="form-grupo">
+          <label for="tipoCliente" class="form-label-compact">Tipo</label>
+          <select id="tipoCliente">
+            <option value="">Selecione</option>
+            <option value="F">Pessoa Física</option>
+            <option value="J">Pessoa Jurídica</option>
+          </select>
         </div>
 
-        <div class="form-linha">
-          <div class="form-grupo form-grupo-largo">
-            <label for="nomeCliente">Nome</label>
-            <input type="text" id="nomeCliente" placeholder="Nome completo ou razão social" maxlength="100" />
-          </div>
+        <div class="form-grupo">
+          <label for="cpfCnpjCliente" class="form-label-compact">CPF / CNPJ</label>
+          <input type="text" id="cpfCnpjCliente" placeholder="Selecione o tipo de cliente" maxlength="18" />
         </div>
 
-        <p id="mensagemCliente" class="mensagem-erro"></p>
+        <div class="form-grupo">
+          <label for="nomeCliente" class="form-label-compact">Nome</label>
+          <input type="text" id="nomeCliente" placeholder="Nome completo ou razão social" maxlength="100" />
+        </div>
 
         <div class="form-acoes">
           <button type="submit" class="btn-primary btn-salvar">Salvar</button>
+          <button type="button" id="btnCancelarEdicao" class="btn-secundario elemento-oculto">Cancelar</button>
         </div>
+
+        <p id="mensagemCliente" class="mensagem-erro form-mensagem-linha"></p>
 
       </form>
 
-      <div class="tabela-wrapper">
-        <table class="tabela-dados" id="tabelaClientes">
-          <thead>
-            <tr>
-              <th>Código</th>
-              <th>Tipo</th>
-              <th>CPF / CNPJ</th>
-              <th>Nome</th>
-            </tr>
-          </thead>
-          <tbody id="corpoTabelaClientes"></tbody>
-        </table>
+      <div class="card-tabela">
+        <div class="card-tabela-header">
+          <span class="card-tabela-titulo">
+            Clientes cadastrados
+            <span id="contadorClientes" class="card-tabela-count">0</span>
+          </span>
+          <div class="busca-wrapper">
+            <svg class="busca-icone" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="filtroBusca" placeholder="Buscar por nome ou CPF/CNPJ..." />
+          </div>
+        </div>
+        <div class="tabela-wrapper">
+          <table class="tabela-dados" id="tabelaClientes">
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Tipo</th>
+                <th>CPF / CNPJ</th>
+                <th>Nome</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="corpoTabelaClientes"></tbody>
+          </table>
+        </div>
       </div>
 
     </section>

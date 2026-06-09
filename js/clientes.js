@@ -10,6 +10,28 @@ const cpfCnpjInput       = document.getElementById('cpfCnpjCliente');
 const nomeClienteInput   = document.getElementById('nomeCliente');
 const mensagemCliente    = document.getElementById('mensagemCliente');
 const corpoTabela        = document.getElementById('corpoTabelaClientes');
+const btnCancelarEdicao  = document.getElementById('btnCancelarEdicao');
+const filtroBusca        = document.getElementById('filtroBusca');
+const contadorClientes   = document.getElementById('contadorClientes');
+
+let clienteEditandoId = null;
+
+/*
+  =====================================================
+  FILTRO DE BUSCA
+  =====================================================
+*/
+
+filtroBusca.addEventListener('input', function () {
+  const termo = this.value.toLowerCase();
+  const linhas = corpoTabela.querySelectorAll('tr');
+
+  linhas.forEach(function (linha) {
+    const nome    = linha.cells[3] ? linha.cells[3].textContent.toLowerCase() : '';
+    const cpfCnpj = linha.cells[2] ? linha.cells[2].textContent.toLowerCase() : '';
+    linha.style.display = (nome.includes(termo) || cpfCnpj.includes(termo)) ? '' : 'none';
+  });
+});
 
 /*
   =====================================================
@@ -74,27 +96,85 @@ async function carregarClientes() {
   }
 
   corpoTabela.innerHTML = '';
+  contadorClientes.textContent = data.length;
 
   data.forEach(function (cliente) {
+    const tipoBadge = cliente.tipo_cliente === 'F'
+      ? '<span class="badge badge-f">Física</span>'
+      : '<span class="badge badge-j">Jurídica</span>';
+
     const linha = document.createElement('tr');
     linha.innerHTML =
-      '<td>' + cliente.clienteid + '</td>' +
-      '<td>' + (cliente.tipo_cliente === 'F' ? 'Física' : 'Jurídica') + '</td>' +
+      '<td class="td-codigo">' + cliente.clienteid + '</td>' +
+      '<td>' + tipoBadge + '</td>' +
       '<td>' + cliente.cpf_cnpj_cliente + '</td>' +
-      '<td>' + cliente.nome_cliente + '</td>';
+      '<td class="td-nome">' + cliente.nome_cliente + '</td>' +
+      '<td class="acoes-tabela">' +
+        '<button class="btn-editar" data-id="' + cliente.clienteid + '">Editar</button>' +
+        '<button class="btn-excluir" data-id="' + cliente.clienteid + '">Excluir</button>' +
+      '</td>';
+
     corpoTabela.appendChild(linha);
+
+    linha.querySelector('.btn-editar').addEventListener('click', function () {
+      const id = parseInt(this.dataset.id);
+      clienteEditandoId = id;
+
+      tipoClienteInput.value    = cliente.tipo_cliente;
+      tipoClienteInput.dispatchEvent(new Event('change'));
+      cpfCnpjInput.value        = cliente.cpf_cnpj_cliente;
+      nomeClienteInput.value    = cliente.nome_cliente;
+
+      btnCancelarEdicao.classList.remove('elemento-oculto');
+      formCliente.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    linha.querySelector('.btn-excluir').addEventListener('click', async function () {
+      const id = parseInt(this.dataset.id);
+      if (!confirm('Deseja excluir o cliente?')) return;
+
+      const { error: erroExclusao } = await supabaseClient
+        .from('cliente')
+        .delete()
+        .eq('clienteid', id);
+
+      if (erroExclusao) {
+        mensagemCliente.style.color = '';
+        mensagemCliente.textContent = 'Erro ao excluir: ' + erroExclusao.message;
+        return;
+      }
+
+      await carregarClientes();
+
+      mensagemCliente.style.color = '#27ae60';
+      mensagemCliente.textContent = 'Cliente excluído com sucesso!';
+      setTimeout(function () {
+        mensagemCliente.textContent = '';
+        mensagemCliente.style.color = '';
+      }, 3000);
+    });
   });
 }
 
 /*
   =====================================================
-  CADASTRO DE CLIENTE
+  CANCELAR EDIÇÃO
   =====================================================
 */
 
+btnCancelarEdicao.addEventListener('click', function () {
+  clienteEditandoId = null;
+  formCliente.reset();
+  mensagemCliente.textContent = '';
+  btnCancelarEdicao.classList.add('elemento-oculto');
+});
+
 /*
-  Remove o destaque dos campos quando o usuário interagir com eles.
+  =====================================================
+  CADASTRO / EDIÇÃO DE CLIENTE
+  =====================================================
 */
+
 tipoClienteInput.addEventListener('change', function () {
   tipoClienteInput.classList.remove('campo-invalido');
 });
@@ -115,10 +195,6 @@ formCliente.addEventListener('submit', async function (evento) {
   const cpfCnpjCliente = cpfCnpjInput.value.trim();
   const nomeCliente    = nomeClienteInput.value.trim();
 
-  /*
-    Validamos o tipo separadamente para destacar o campo
-    caso o usuário não tenha feito a seleção.
-  */
   if (!tipoCliente) {
     tipoClienteInput.classList.add('campo-invalido');
     tipoClienteInput.focus();
@@ -137,32 +213,56 @@ formCliente.addEventListener('submit', async function (evento) {
     return;
   }
 
-  if (!cpfCnpjCliente || !nomeCliente || !tipoCliente) {
-    mensagemCliente.textContent = 'Preencha todos os campos.';
-    tipoClienteInput.classList.add('campo-invalido');
-    nomeClienteInput.classList.add('campo-invalido');
-    cpfCnpjInput.classList.add('campo-invalido');
-    tipoClienteInput.focus();
-    nomeClienteInput.focus();
-    cpfCnpjInput.focus();
-    return;
-  }
-
   /*
-    Verificamos se o CPF/CNPJ já existe na base de dados
-    antes de tentar cadastrar o cliente.
+    Verificamos duplicidade de CPF/CNPJ, excluindo o próprio
+    registro quando estamos em modo de edição.
   */
-  const { data: clienteExistente } = await supabaseClient
+  let queryDuplicado = supabaseClient
     .from('cliente')
     .select('clienteid')
-    .eq('cpf_cnpj_cliente', cpfCnpjCliente)
-    .single();
+    .eq('cpf_cnpj_cliente', cpfCnpjCliente);
+
+  if (clienteEditandoId !== null) {
+    queryDuplicado = queryDuplicado.neq('clienteid', clienteEditandoId);
+  }
+
+  const { data: clienteExistente } = await queryDuplicado.single();
 
   if (clienteExistente) {
     mensagemCliente.style.color = '';
     mensagemCliente.textContent = 'CPF/CNPJ já cadastrado.';
     cpfCnpjInput.classList.add('campo-invalido');
     cpfCnpjInput.focus();
+    return;
+  }
+
+  if (clienteEditandoId !== null) {
+    const { error: erroUpdate } = await supabaseClient
+      .from('cliente')
+      .update({
+        tipo_cliente:     tipoCliente,
+        cpf_cnpj_cliente: cpfCnpjCliente,
+        nome_cliente:     nomeCliente
+      })
+      .eq('clienteid', clienteEditandoId);
+
+    if (erroUpdate) {
+      mensagemCliente.textContent = 'Erro ao atualizar: ' + erroUpdate.message;
+      return;
+    }
+
+    clienteEditandoId = null;
+    btnCancelarEdicao.classList.add('elemento-oculto');
+    formCliente.reset();
+    await carregarClientes();
+
+    mensagemCliente.style.color = '#27ae60';
+    mensagemCliente.textContent = 'Cliente atualizado com sucesso!';
+    setTimeout(function () {
+      mensagemCliente.textContent = '';
+      mensagemCliente.style.color = '';
+    }, 3000);
+
     return;
   }
 

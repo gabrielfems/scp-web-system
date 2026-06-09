@@ -32,9 +32,22 @@ const supabaseClient = supabase.createClient(
   SUPABASE_ANON_KEY
 );
 
+document.addEventListener('DOMContentLoaded', function () {
+  const loginCard = document.querySelector('.login-card');
+  const imageCard = document.querySelector('.login-image-card');
+  if (loginCard && imageCard) {
+    imageCard.style.height = loginCard.offsetHeight + 'px';
+  }
+});
+
 function toggleSenha() {
   const input = document.getElementById('senha');
-  input.type = input.type === 'password' ? 'text' : 'password';
+  const aberto = document.getElementById('icone-olho-aberto');
+  const fechado = document.getElementById('icone-olho-fechado');
+  const visivel = input.type === 'password';
+  input.type = visivel ? 'text' : 'password';
+  aberto.style.display = visivel ? 'none' : '';
+  fechado.style.display = visivel ? '' : 'none';
 }
 
 /*

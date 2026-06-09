@@ -42,51 +42,53 @@
     <section id="secao-categorias" class="secao">
       <h1>Categorias</h1>
 
-      <form id="formCategoria" class="form-cadastro">
+      <form id="formCategoria" class="form-cadastro form-linha-unica" style="grid-template-columns: 160px 1fr auto;">
 
-        <div class="form-linha">
-          <div class="form-grupo">
-            <label for="idCategoria">Código</label>
-            <input type="number" id="idCategoria" placeholder="Código da categoria" min="1" />
-          </div>
-
-          <div class="form-grupo form-grupo-largo">
-            <label for="descricaoCategoria">Descrição</label>
-            <input type="text" id="descricaoCategoria" placeholder="Descrição da categoria" maxlength="50" />
-          </div>
+        <div class="form-grupo">
+          <label for="idCategoria" class="form-label-compact">Código</label>
+          <input type="number" id="idCategoria" placeholder="Código" min="1" />
         </div>
 
-        <p id="mensagemCategoria" class="mensagem-erro"></p>
+        <div class="form-grupo">
+          <label for="descricaoCategoria" class="form-label-compact">Descrição</label>
+          <input type="text" id="descricaoCategoria" placeholder="Descrição da categoria" maxlength="50" />
+        </div>
 
         <div class="form-acoes">
           <button type="submit" class="btn-primary btn-salvar">Salvar</button>
+          <button type="button" id="btnCancelarCategoriaEdicao" class="btn-secundario elemento-oculto">Cancelar</button>
         </div>
+
+        <p id="mensagemCategoria" class="mensagem-erro form-mensagem-linha"></p>
 
       </form>
 
-      <div class="form-cadastro">
-        <div class="form-linha">
-          <div class="form-grupo">
-            <label for="idCategoriaExcluir">ID da Categoria</label>
-            <input type="number" id="idCategoriaExcluir" placeholder="ID da categoria" min="1" />
+      <div class="card-tabela">
+        <div class="card-tabela-header">
+          <span class="card-tabela-titulo">
+            Categorias cadastradas
+            <span id="contadorCategorias" class="card-tabela-count">0</span>
+          </span>
+          <div class="busca-wrapper">
+            <svg class="busca-icone" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="filtroCategoriaBusca" placeholder="Buscar por código ou descrição..." />
           </div>
         </div>
-        <p id="mensagemExclusaoCategoria" class="mensagem-erro"></p>
-        <div class="form-acoes">
-          <button type="button" class="btn-excluir btn-salvar" onclick="excluirCategoria()">Excluir Categoria</button>
+        <div class="tabela-wrapper">
+          <table class="tabela-dados" id="tabelaCategorias">
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Descrição</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="corpoTabelaCategorias"></tbody>
+          </table>
         </div>
-      </div>
-
-      <div class="tabela-wrapper">
-        <table class="tabela-dados" id="tabelaCategorias">
-          <thead>
-            <tr>
-              <th>Código</th>
-              <th>Descrição</th>
-            </tr>
-          </thead>
-          <tbody id="corpoTabelaCategorias"></tbody>
-        </table>
       </div>
 
     </section>

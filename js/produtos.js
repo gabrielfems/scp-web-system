@@ -15,12 +15,32 @@ const mensagemProduto         = document.getElementById('mensagemProduto');
 const corpoTabelaProdutos     = document.getElementById('corpoTabelaProdutos');
 const btnCancelarProduto      = document.getElementById('btnCancelarProduto');
 const btnSalvarProduto        = document.getElementById('btnSalvarProduto');
+const contadorProdutos        = document.getElementById('contadorProdutos');
+const filtroProdutoBusca      = document.getElementById('filtroProdutoBusca');
 
 /*
   Controla se estamos editando um produto existente.
   Quando nulo, o formulário faz INSERT; quando preenchido, faz UPDATE.
 */
 let produtoEditandoId = null;
+
+/*
+  =====================================================
+  FILTRO DE BUSCA
+  =====================================================
+*/
+
+filtroProdutoBusca.addEventListener('input', function () {
+  const termo = this.value.toLowerCase();
+  const linhas = corpoTabelaProdutos.querySelectorAll('tr');
+
+  linhas.forEach(function (linha) {
+    const id         = linha.cells[0] ? linha.cells[0].textContent.toLowerCase() : '';
+    const categoria  = linha.cells[1] ? linha.cells[1].textContent.toLowerCase() : '';
+    const descricao  = linha.cells[2] ? linha.cells[2].textContent.toLowerCase() : '';
+    linha.style.display = (id.includes(termo) || categoria.includes(termo) || descricao.includes(termo)) ? '' : 'none';
+  });
+});
 
 /*
   Armazena o valor ISO da data selecionada para envio ao banco.
@@ -117,6 +137,7 @@ async function carregarProdutos() {
   }
 
   corpoTabelaProdutos.innerHTML = '';
+  contadorProdutos.textContent = data.length;
 
   data.forEach(function (produto) {
     const nomeCategoria  = mapaCategoria[produto.categoriaprodutoid] || '-';
@@ -129,9 +150,9 @@ async function carregarProdutos() {
 
     const linha = document.createElement('tr');
     linha.innerHTML =
-      '<td>' + produto.produtoid + '</td>' +
+      '<td class="td-codigo">' + produto.produtoid + '</td>' +
       '<td>' + nomeCategoria + '</td>' +
-      '<td>' + produto.ds_produto + '</td>' +
+      '<td class="td-nome">' + produto.ds_produto + '</td>' +
       '<td>' + valorFormatado + '</td>' +
       '<td>' + dataFormatada + '</td>' +
       '<td><span class="badge ' + statusClasse + '">' + statusTexto + '</span></td>' +

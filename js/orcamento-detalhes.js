@@ -66,7 +66,7 @@ async function carregarOrcamento() {
 
   folha.innerHTML =
     '<div class="doc-cabecalho">' +
-      '<div class="doc-empresa">SRP</div>' +
+      '<div class="doc-empresa">SCP</div>' +
       '<div class="doc-titulo-bloco">' +
         '<div class="doc-titulo">Orçamento N&ordm; ' + orc.orcamentoid + '</div>' +
         '<div class="doc-datas">' +

@@ -50,32 +50,32 @@
 
           <!-- Bloco 1: Dados do Orçamento -->
           <div class="bloco-orcamento">
-            <h2 class="bloco-titulo">Dados do Orçamento</h2>
+            <span class="bloco-titulo">Dados do Orçamento</span>
 
             <div class="form-cadastro">
 
               <div class="form-linha">
                 <div class="form-grupo form-grupo-largo">
-                  <label for="clienteOrcamento">Cliente</label>
+                  <label for="clienteOrcamento" class="form-label-compact">Cliente</label>
                   <select id="clienteOrcamento">
                     <option value="">Selecione</option>
                   </select>
                 </div>
 
                 <div class="form-grupo">
-                  <label>Código</label>
+                  <label class="form-label-compact">Código</label>
                   <input type="text" id="codigoOrcamento" class="input-readonly-display" readonly placeholder="Automático" />
                 </div>
               </div>
 
               <div class="form-linha">
                 <div class="form-grupo">
-                  <label for="dataOrcamento">Data do Orçamento</label>
+                  <label for="dataOrcamento" class="form-label-compact">Data do Orçamento</label>
                   <input type="text" id="dataOrcamento" placeholder="dd/mm/aaaa" readonly />
                 </div>
 
                 <div class="form-grupo">
-                  <label for="dataValidade">Data de Validade</label>
+                  <label for="dataValidade" class="form-label-compact">Data de Validade</label>
                   <input type="text" id="dataValidade" placeholder="dd/mm/aaaa" readonly />
                 </div>
               </div>
@@ -87,37 +87,37 @@
 
           <!-- Bloco 2: Adicionar Item -->
           <div class="bloco-orcamento">
-            <h2 class="bloco-titulo">Adicionar Item</h2>
+            <span class="bloco-titulo">Adicionar Item</span>
 
             <div class="form-cadastro">
 
               <div class="form-linha">
                 <div class="form-grupo form-grupo-largo">
-                  <label for="produtoOrcamento">Produto</label>
+                  <label for="produtoOrcamento" class="form-label-compact">Produto</label>
                   <select id="produtoOrcamento">
                     <option value="">Selecione um produto</option>
                   </select>
                 </div>
 
                 <div class="form-grupo">
-                  <label for="quantidadeItem">Quantidade</label>
+                  <label for="quantidadeItem" class="form-label-compact">Quantidade</label>
                   <input type="number" id="quantidadeItem" placeholder="0" min="1" step="1" />
                 </div>
               </div>
 
               <div class="form-linha">
                 <div class="form-grupo form-grupo-largo">
-                  <label for="descricaoItemOrc">Descrição</label>
+                  <label for="descricaoItemOrc" class="form-label-compact">Descrição</label>
                   <input type="text" id="descricaoItemOrc" class="input-readonly-display" readonly placeholder="—" />
                 </div>
 
                 <div class="form-grupo">
-                  <label for="valorUnitarioItem">Valor Unitário</label>
+                  <label for="valorUnitarioItem" class="form-label-compact">Valor Unitário</label>
                   <input type="text" id="valorUnitarioItem" class="input-readonly-display" readonly placeholder="—" />
                 </div>
 
                 <div class="form-grupo">
-                  <label for="valorTotalItemOrc">Total do Item</label>
+                  <label for="valorTotalItemOrc" class="form-label-compact">Total do Item</label>
                   <input type="text" id="valorTotalItemOrc" class="input-readonly-display" readonly placeholder="—" />
                 </div>
               </div>
@@ -134,8 +134,8 @@
         <!-- Coluna direita: Itens do Orçamento + Lista -->
         <div class="orcamento-direita">
 
-          <div class="bloco-orcamento">
-            <h2 class="bloco-titulo">Itens do Orçamento</h2>
+          <div class="bloco-orcamento card-itens-orc">
+            <span class="bloco-titulo">Itens do Orçamento</span>
 
             <div class="tabela-wrapper">
               <table class="tabela-dados tabela-itens-orc">
@@ -168,8 +168,8 @@
           </div>
 
           <!-- Lista de Orçamentos Cadastrados -->
-          <div id="blocoListaOrcamentos" class="bloco-orcamento bloco-lista-orcamentos elemento-oculto">
-            <h2 class="bloco-titulo">Orçamentos Cadastrados</h2>
+          <div id="blocoListaOrcamentos" class="bloco-orcamento bloco-lista-orcamentos card-itens-orc elemento-oculto">
+            <span class="bloco-titulo">Orçamentos Cadastrados</span>
             <div class="tabela-lista-orc-wrapper">
               <table class="tabela-dados tabela-lista-orc">
                 <thead>
