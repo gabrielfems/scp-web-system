@@ -44,7 +44,7 @@
 
       <div class="dashboard-cards">
 
-        <div class="dashboard-card card-vigentes">
+        <div class="dashboard-card card-vigentes" style="cursor:pointer" onclick="abrirModalVigentes()">
           <div class="card-header">
             <span class="card-titulo">Orçamentos Vigentes</span>
             <div class="card-icone">
@@ -56,7 +56,7 @@
           <span class="card-valor" id="cardVigentes">—</span>
         </div>
 
-        <div class="dashboard-card card-expirados">
+        <div class="dashboard-card card-expirados" style="cursor:pointer" onclick="abrirModalExpirados()">
           <div class="card-header">
             <span class="card-titulo">Orçamentos Expirados</span>
             <div class="card-icone">
@@ -69,7 +69,7 @@
           <span class="card-valor" id="cardExpirados">—</span>
         </div>
 
-        <div class="dashboard-card card-clientes">
+        <div class="dashboard-card card-clientes" style="cursor:pointer" onclick="abrirModalClientes()">
           <div class="card-header">
             <span class="card-titulo">Total de Clientes</span>
             <div class="card-icone">
@@ -97,6 +97,41 @@
           <span class="card-valor" id="cardTicket">—</span>
         </div>
 
+        <div class="dashboard-card card-valor-vigentes" style="cursor:pointer" onclick="abrirModalVigentes()">
+          <div class="card-header">
+            <span class="card-titulo">Em Orçamentos Vigentes</span>
+            <div class="card-icone">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+                <line x1="12" y1="12" x2="12" y2="16"/>
+                <line x1="10" y1="14" x2="14" y2="14"/>
+              </svg>
+            </div>
+          </div>
+          <span class="card-valor" id="cardValorVigentes">—</span>
+        </div>
+
+        <div class="dashboard-card card-sem-orcamento" style="cursor:pointer" onclick="abrirModalSemOrcamento()">
+          <div class="card-header">
+            <span class="card-titulo">Clientes sem Orçamento</span>
+            <div class="card-icone">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="8.5" cy="7" r="4"/>
+                <line x1="18" y1="8" x2="23" y2="13"/>
+                <line x1="23" y1="8" x2="18" y2="13"/>
+              </svg>
+            </div>
+          </div>
+          <span class="card-valor" id="cardClientesSemOrcamento">—</span>
+        </div>
+
+      </div>
+
+      <div id="secaoVencendo7" class="alerta-vencendo" style="display:none">
+        <div class="alerta-vencendo-titulo">&#9888; VENCEM EM 7 DIAS</div>
+        <ul id="listaVencendo7" class="alerta-vencendo-lista"></ul>
       </div>
 
       <div class="dashboard-recentes">
@@ -114,6 +149,23 @@
             </thead>
             <tbody id="corpoOrcamentosRecentes">
               <tr><td colspan="5" class="tabela-vazia">Carregando...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="dashboard-recentes">
+        <span class="bloco-titulo">Produtos Mais Orçados</span>
+        <div class="tabela-wrapper">
+          <table class="tabela-dados">
+            <thead>
+              <tr>
+                <th>Produto</th>
+                <th>Vezes orçado</th>
+              </tr>
+            </thead>
+            <tbody id="corpoMaisOrcados">
+              <tr><td colspan="2" class="tabela-vazia">Carregando...</td></tr>
             </tbody>
           </table>
         </div>
@@ -152,6 +204,16 @@
     </section>
 
   </main>
+
+  <div id="modalOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:300; align-items:center; justify-content:center;">
+    <div style="background:#fff; border-radius:8px; width:90%; max-width:700px; max-height:80vh; overflow-y:auto; padding:24px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <span id="modalTitulo" style="font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#444;"></span>
+        <button onclick="fecharModal()" style="background:none; border:none; font-size:22px; cursor:pointer; color:#888; line-height:1;">&times;</button>
+      </div>
+      <div id="modalCorpo"></div>
+    </div>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/login.js"></script>

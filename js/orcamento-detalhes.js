@@ -44,7 +44,7 @@ async function carregarOrcamento() {
       linhasItens +=
         '<tr>' +
           '<td>' + (item.produtodesc || '—') + '</td>' +
-          '<td>—</td>' +
+          '<td>' + (item.descricao ? item.descricao : '') + '</td>' +
           '<td>' + (item.qt_produto || 0) + '</td>' +
           '<td>' + formatarMoeda(item.vl_unitario) + '</td>' +
           '<td>' + formatarMoeda(item.vl_total) + '</td>' +
@@ -66,7 +66,9 @@ async function carregarOrcamento() {
 
   folha.innerHTML =
     '<div class="doc-cabecalho">' +
-      '<div class="doc-empresa">SCP</div>' +
+      '<div style="border-radius:6px;padding:6px 10px;display:inline-block;">' +
+        '<img src="assets/logo.png" alt="SCP" style="height:48px;display:block;" />' +
+      '</div>' +
       '<div class="doc-titulo-bloco">' +
         '<div class="doc-titulo">Orçamento N&ordm; ' + orc.orcamentoid + '</div>' +
         '<div class="doc-datas">' +
@@ -94,13 +96,6 @@ async function carregarOrcamento() {
           '</tr>' +
         '</thead>' +
         '<tbody>' + linhasItens + '</tbody>' +
-        '<tfoot>' +
-          '<tr>' +
-            '<td colspan="3"></td>' +
-            '<td class="tfoot-label">Total</td>' +
-            '<td class="tfoot-valor">' + formatarMoeda(orc.vl_total_orcamento) + '</td>' +
-          '</tr>' +
-        '</tfoot>' +
       '</table>' +
     '</div>' +
 

@@ -299,10 +299,10 @@ body.pagina-interna {
 
 .sidebar-logo-img {
   width: 100%;
-  max-width: 160px;
+  max-width: 60px;
   display: block;
   margin: 0 auto;
-  filter: brightness(0) invert(1);
+  margin-bottom: 12px;
 }
 
 .sidebar-nav {
@@ -460,6 +460,10 @@ body.pagina-interna {
   color: #333;
 }
 
+.tabela-dados tbody tr:last-child td {
+  border-bottom: none;
+}
+
 .tabela-dados tbody tr:nth-child(even) {
   background-color: #f4f0f9;
 }
@@ -538,6 +542,51 @@ body.pagina-interna {
 
 .elemento-oculto {
   display: none;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-box {
+  background: #fff;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 700px;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 24px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #444;
+}
+
+.modal-fechar {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: #888;
+  line-height: 1;
+}
+
+.modal-fechar:hover {
+  color: #333;
 }
 
 .flatpickr-input {
@@ -692,10 +741,12 @@ body.pagina-interna {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
 }
 
-.card-vigentes  { border-top-color: #27ae60; }
-.card-expirados { border-top-color: #c0392b; }
-.card-clientes  { border-top-color: #3d007a; }
-.card-ticket    { border-top-color: #2980b9; }
+.card-vigentes       { border-top-color: #27ae60; }
+.card-expirados      { border-top-color: #c0392b; }
+.card-clientes       { border-top-color: #3d007a; }
+.card-ticket         { border-top-color: #2980b9; }
+.card-valor-vigentes { border-top-color: #27ae60; }
+.card-sem-orcamento  { border-top-color: #e67e22; }
 
 .card-header {
   display: flex;
@@ -723,10 +774,12 @@ body.pagina-interna {
   flex-shrink: 0;
 }
 
-.card-vigentes  .card-icone { background: #e8f8f0; color: #27ae60; }
-.card-expirados .card-icone { background: #fdecea; color: #c0392b; }
-.card-clientes  .card-icone { background: #ede6f7; color: #3d007a; }
-.card-ticket    .card-icone { background: #e3f0fa; color: #2980b9; }
+.card-vigentes       .card-icone { background: #e8f8f0; color: #27ae60; }
+.card-expirados      .card-icone { background: #fdecea; color: #c0392b; }
+.card-clientes       .card-icone { background: #ede6f7; color: #3d007a; }
+.card-ticket         .card-icone { background: #e3f0fa; color: #2980b9; }
+.card-valor-vigentes .card-icone { background: #e8f8f0; color: #27ae60; }
+.card-sem-orcamento  .card-icone { background: #fef3e8; color: #e67e22; }
 
 .card-valor {
   font-size: 2rem;
@@ -734,10 +787,43 @@ body.pagina-interna {
   line-height: 1;
 }
 
-.card-vigentes  .card-valor { color: #27ae60; }
-.card-expirados .card-valor { color: #c0392b; }
-.card-clientes  .card-valor { color: #3d007a; }
-.card-ticket    .card-valor { color: #2980b9; }
+.card-vigentes       .card-valor { color: #27ae60; }
+.card-expirados      .card-valor { color: #c0392b; }
+.card-clientes       .card-valor { color: #3d007a; }
+.card-ticket         .card-valor { color: #2980b9; }
+.card-valor-vigentes .card-valor { color: #27ae60; }
+.card-sem-orcamento  .card-valor { color: #e67e22; }
+
+.alerta-vencendo {
+  background: #fff8e1;
+  border-left: 4px solid #f39c12;
+  border-radius: 6px;
+  padding: 16px 20px;
+  margin-bottom: 28px;
+}
+
+.alerta-vencendo-titulo {
+  font-size: 13px;
+  font-weight: 700;
+  color: #b7770d;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+}
+
+.alerta-vencendo-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.alerta-vencendo-lista li {
+  font-size: 14px;
+  color: #5a4000;
+}
 
 .dashboard-recentes {
   background: #fff;
@@ -1385,6 +1471,18 @@ body.pagina-detalhes {
   letter-spacing: 0.04em;
 }
 
+.form-linha-itens {
+  display: grid !important;
+  grid-template-columns: 1fr 120px 120px;
+  gap: 12px;
+  align-items: end;
+  flex-direction: unset;
+}
+
+.form-linha-itens .form-label-compact {
+  font-size: 10px !important;
+}
+
 /* =====================================================
    CARD DA TABELA
    ===================================================== */
@@ -1393,19 +1491,21 @@ body.pagina-detalhes {
   background: #fff;
   border-radius: 6px;
   overflow: hidden;
+  overflow-x: auto;
+  padding: 0;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .card-tabela .tabela-dados {
   max-width: none;
-  border-radius: 0;
+  border-radius: 0 0 6px 6px;
 }
 
 .card-tabela-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 16px;
+  padding: 20px 20px 12px 20px;
   border-bottom: 1px solid #eee;
   gap: 16px;
 }
