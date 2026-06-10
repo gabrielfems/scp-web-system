@@ -24,7 +24,6 @@ async function carregarDashboard() {
     { count: vigentes,          error: errV   },
     { count: expirados,         error: errE   },
     { count: clientes,          error: errC   },
-    { data:  orcTodos,          error: errO   },
     { data:  ativos,            error: errA   },
     { data:  inativos,          error: errI   },
     { data:  categorias                       },
@@ -37,7 +36,6 @@ async function carregarDashboard() {
     supabaseClient.from('orcamento').select('*', { count: 'exact', head: true }).gte('dt_validade_orcamento', hoje),
     supabaseClient.from('orcamento').select('*', { count: 'exact', head: true }).lt('dt_validade_orcamento', hoje),
     supabaseClient.from('cliente').select('*', { count: 'exact', head: true }),
-    supabaseClient.from('orcamento').select('vl_total_orcamento'),
     supabaseClient.from('produto').select('produtoid, ds_produto, vl_venda_produto, categoriaprodutoid').eq('status_produto', 'A').order('ds_produto', { ascending: true }),
     supabaseClient.from('produto').select('produtoid, ds_produto, vl_venda_produto, categoriaprodutoid').eq('status_produto', 'I').order('ds_produto', { ascending: true }),
     supabaseClient.from('categoria_produto').select('categoriaprodutoid, ds_categoria_produto'),
@@ -52,14 +50,14 @@ async function carregarDashboard() {
   document.getElementById('cardExpirados').textContent = errE ? 'Erro' : (expirados ?? 0);
   document.getElementById('cardClientes').textContent  = errC ? 'Erro' : (clientes  ?? 0);
 
-  if (errO || !orcTodos) {
+  if (errVV || !orcVigentesValores) {
     document.getElementById('cardTicket').textContent = 'Erro';
-  } else if (orcTodos.length === 0) {
-    document.getElementById('cardTicket').textContent = 'R$ 0,00';
+  } else if (orcVigentesValores.length === 0) {
+    document.getElementById('cardTicket').textContent = (0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   } else {
-    const soma  = orcTodos.reduce(function (acc, o) { return acc + parseFloat(o.vl_total_orcamento || 0); }, 0);
-    const media = soma / orcTodos.length;
-    document.getElementById('cardTicket').textContent = 'R$ ' + media.toFixed(2).replace('.', ',');
+    const soma  = orcVigentesValores.reduce(function (acc, o) { return acc + parseFloat(o.vl_total_orcamento || 0); }, 0);
+    const media = soma / orcVigentesValores.length;
+    document.getElementById('cardTicket').textContent = media.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   }
 
   _mapaCategoriaProduto = {};
@@ -71,13 +69,6 @@ async function carregarDashboard() {
 
   renderizarProdutoCard('ativos',   ativos,   errA);
   renderizarProdutoCard('inativos', inativos, errI);
-
-  if (errVV || !orcVigentesValores) {
-    document.getElementById('cardValorVigentes').textContent = 'Erro';
-  } else {
-    const somaVig = orcVigentesValores.reduce(function(acc, o) { return acc + parseFloat(o.vl_total_orcamento || 0); }, 0);
-    document.getElementById('cardValorVigentes').textContent = somaVig.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-  }
 
   if (errTCI || errOCI || !todosClientesIds || !orcClienteIds) {
     document.getElementById('cardClientesSemOrcamento').textContent = 'Erro';
@@ -136,7 +127,7 @@ function renderizarLinhasProdutos(tipo, visivel, temMais) {
 
   var linhas = visivel.map(function (p) {
     var cat = _mapaCategoriaProduto[p.categoriaprodutoid] || '—';
-    var val = 'R$ ' + parseFloat(p.vl_venda_produto).toFixed(2).replace('.', ',');
+    var val = parseFloat(p.vl_venda_produto).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     return '<tr><td>' + p.ds_produto + '</td><td>' + cat + '</td><td>' + val + '</td></tr>';
   }).join('');
 
@@ -182,7 +173,7 @@ async function carregarOrcamentosRecentes(hoje) {
       ? orc.dt_validade_orcamento.substring(0, 10).split('-').reverse().join('/')
       : '—';
     const vlTotal = orc.vl_total_orcamento !== null
-      ? 'R$ ' + parseFloat(orc.vl_total_orcamento).toFixed(2).replace('.', ',')
+      ? parseFloat(orc.vl_total_orcamento).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
       : '—';
     const expirado = orc.dt_validade_orcamento
       ? orc.dt_validade_orcamento.substring(0, 10) < hoje
@@ -190,14 +181,76 @@ async function carregarOrcamentosRecentes(hoje) {
 
     const tr = document.createElement('tr');
     tr.className = expirado ? 'linha-expirada' : 'linha-vigente';
+    tr.style.cursor = 'pointer';
     tr.innerHTML =
       '<td>' + orc.orcamentoid + '</td>' +
       '<td>' + (orc.cliente ? orc.cliente.nome_cliente : '—') + '</td>' +
       '<td>' + dtOrc + '</td>' +
       '<td>' + dtVal + '</td>' +
       '<td>' + vlTotal + '</td>';
+    tr.addEventListener('click', function () { abrirModalDetalheOrcamento(orc.orcamentoid); });
     corpo.appendChild(tr);
   });
+}
+
+async function abrirModalDetalheOrcamento(id) {
+  abrirModal('Orçamento #' + id, _modalCarregando());
+
+  const [{ data: orc, error: errOrc }, { data: itens, error: errItens }] = await Promise.all([
+    supabaseClient
+      .from('orcamento')
+      .select('orcamentoid, dt_orcamento, dt_validade_orcamento, vl_total_orcamento, cliente(nome_cliente)')
+      .eq('orcamentoid', id)
+      .single(),
+    supabaseClient
+      .from('orcamento_item')
+      .select('produtodesc, qt_produto, vl_unitario, vl_total')
+      .eq('orcamentoid', id)
+      .order('orcamentoitemid', { ascending: true })
+  ]);
+
+  if (errOrc || !orc) { _modalErro(); return; }
+
+  const hoje  = new Date().toISOString().split('T')[0];
+  const dtOrc = orc.dt_orcamento
+    ? orc.dt_orcamento.substring(0, 10).split('-').reverse().join('/')
+    : '—';
+  const dtVal = orc.dt_validade_orcamento
+    ? orc.dt_validade_orcamento.substring(0, 10).split('-').reverse().join('/')
+    : '—';
+  const expirado = orc.dt_validade_orcamento && orc.dt_validade_orcamento.substring(0, 10) < hoje;
+  const statusBadge = expirado
+    ? '<span style="background:#fdecea;color:#c0392b;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;">Expirado</span>'
+    : '<span style="background:#eafaf1;color:#27ae60;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;">Vigente</span>';
+
+  const vlTotal = orc.vl_total_orcamento !== null
+    ? parseFloat(orc.vl_total_orcamento).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+    : '—';
+
+  var linhasItens = '';
+  if (errItens || !itens || itens.length === 0) {
+    linhasItens = '<tr><td colspan="4" class="tabela-vazia">Nenhum item encontrado.</td></tr>';
+  } else {
+    linhasItens = itens.map(function (it) {
+      var vlUnit = parseFloat(it.vl_unitario).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      var vlTot  = parseFloat(it.vl_total).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      return '<tr><td>' + (it.produtodesc || '—') + '</td><td style="text-align:center">' + it.qt_produto + '</td><td style="text-align:right">' + vlUnit + '</td><td style="text-align:right">' + vlTot + '</td></tr>';
+    }).join('');
+  }
+
+  document.getElementById('modalCorpo').innerHTML =
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;margin-bottom:20px;font-size:13px;">' +
+      '<div><span style="color:#888">Cliente</span><br><strong>' + (orc.cliente ? orc.cliente.nome_cliente : '—') + '</strong></div>' +
+      '<div><span style="color:#888">Status</span><br>' + statusBadge + '</div>' +
+      '<div><span style="color:#888">Data do Orçamento</span><br><strong>' + dtOrc + '</strong></div>' +
+      '<div><span style="color:#888">Validade</span><br><strong>' + dtVal + '</strong></div>' +
+      '<div><span style="color:#888">Valor Total</span><br><strong>' + vlTotal + '</strong></div>' +
+    '</div>' +
+    '<p style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#888;margin:0 0 8px">Itens</p>' +
+    '<table class="tabela-dados">' +
+      '<thead><tr><th>Produto</th><th style="text-align:center">Qtd</th><th style="text-align:right">Unit.</th><th style="text-align:right">Total</th></tr></thead>' +
+      '<tbody>' + linhasItens + '</tbody>' +
+    '</table>';
 }
 
 function renderizarMaisOrcados(itens, erro) {

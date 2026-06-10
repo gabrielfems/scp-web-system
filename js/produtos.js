@@ -141,7 +141,7 @@ async function carregarProdutos() {
 
   data.forEach(function (produto) {
     const nomeCategoria  = mapaCategoria[produto.categoriaprodutoid] || '-';
-    const valorFormatado = 'R$ ' + parseFloat(produto.vl_venda_produto).toFixed(2).replace('.', ',');
+    const valorFormatado = parseFloat(produto.vl_venda_produto).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     const dataFormatada  = produto.dt_cadastro_produto
       ? produto.dt_cadastro_produto.substring(0, 10).split('-').reverse().join('/')
       : '-';

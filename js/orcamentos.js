@@ -123,7 +123,7 @@ function preencherDadosProduto() {
   }
 
   descricaoItemOrcInput.value  = produto.obs_produto || '—';
-  valorUnitarioItemInput.value = 'R$ ' + parseFloat(produto.vl_venda_produto).toFixed(2).replace('.', ',');
+  valorUnitarioItemInput.value = parseFloat(produto.vl_venda_produto).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   recalcularTotalItem();
 }
 
@@ -134,7 +134,7 @@ function recalcularTotalItem() {
 
   if (produto && quantidade > 0) {
     const total = parseFloat(produto.vl_venda_produto) * quantidade;
-    valorTotalItemOrcInput.value = 'R$ ' + total.toFixed(2).replace('.', ',');
+    valorTotalItemOrcInput.value = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   } else {
     valorTotalItemOrcInput.value = '';
   }
@@ -154,8 +154,7 @@ function recalcularTotalOrcamento() {
     return soma + item.vl_total_item;
   }, 0);
 
-  const formatado = 'R$ ' + total.toFixed(2).replace('.', ',');
-  valorTotalOrcamentoEl.textContent = formatado;
+  valorTotalOrcamentoEl.textContent = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
 function renderizarTabelaItens() {
@@ -174,8 +173,8 @@ function renderizarTabelaItens() {
       '<td>' + item.nome + '</td>' +
       '<td>' + item.descricao + '</td>' +
       '<td>' + item.quantidade + '</td>' +
-      '<td>R$ ' + parseFloat(item.vl_unitario).toFixed(2).replace('.', ',') + '</td>' +
-      '<td>R$ ' + parseFloat(item.vl_total_item).toFixed(2).replace('.', ',') + '</td>' +
+      '<td>' + parseFloat(item.vl_unitario).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) + '</td>' +
+      '<td>' + parseFloat(item.vl_total_item).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) + '</td>' +
       '<td class="acoes-tabela">' +
         '<button class="btn-editar" onclick="editarItem(' + index + ')">Editar</button>' +
         '<button class="btn-excluir" onclick="removerItem(' + index + ')">Remover</button>' +
@@ -418,7 +417,7 @@ function renderizarListaOrcamentos(lista) {
       ? orc.dt_validade_orcamento.substring(0, 10).split('-').reverse().join('/')
       : '—';
     const vlTotal = orc.vl_total_orcamento !== null
-      ? 'R$ ' + parseFloat(orc.vl_total_orcamento).toFixed(2).replace('.', ',')
+      ? parseFloat(orc.vl_total_orcamento).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
       : '—';
 
     const tr = document.createElement('tr');
@@ -430,6 +429,7 @@ function renderizarListaOrcamentos(lista) {
       '<td>' + vlTotal + '</td>' +
       '<td class="acoes-tabela">' +
         '<button class="btn-editar" onclick="visualizarOrcamento(' + orc.orcamentoid + ')">Visualizar</button>' +
+        '<button class="btn-excluir" onclick="excluirOrcamento(' + orc.orcamentoid + ')">Excluir</button>' +
       '</td>';
     corpoListaOrcamentos.appendChild(tr);
   });
@@ -438,6 +438,32 @@ function renderizarListaOrcamentos(lista) {
 function visualizarOrcamento(id) {
   localStorage.setItem('orcamentoSelecionadoId', id);
   window.location.href = 'orcamento-detalhes.html';
+}
+
+async function excluirOrcamento(id) {
+  if (!confirm('Excluir o orçamento #' + id + '? Esta ação não pode ser desfeita.')) return;
+
+  const { error: errItens } = await supabaseClient
+    .from('orcamento_item')
+    .delete()
+    .eq('orcamentoid', id);
+
+  if (errItens) {
+    alert('Erro ao excluir itens do orçamento: ' + errItens.message);
+    return;
+  }
+
+  const { error: errOrc } = await supabaseClient
+    .from('orcamento')
+    .delete()
+    .eq('orcamentoid', id);
+
+  if (errOrc) {
+    alert('Erro ao excluir orçamento: ' + errOrc.message);
+    return;
+  }
+
+  carregarListaOrcamentos();
 }
 
 /*
