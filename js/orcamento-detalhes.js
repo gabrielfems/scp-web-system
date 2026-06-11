@@ -11,7 +11,7 @@ function formatarMoeda(valor) {
 }
 
 async function carregarOrcamento() {
-  const id = localStorage.getItem('orcamentoSelecionadoId');
+  const id = new URLSearchParams(window.location.search).get('id') || localStorage.getItem('orcamentoSelecionadoId');
 
   if (!id) {
     folha.innerHTML = '<p class="doc-carregando">Nenhum orçamento selecionado.</p>';

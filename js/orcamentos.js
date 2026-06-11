@@ -207,23 +207,17 @@ function adicionarItem() {
   produtoOrcamentoInput.classList.remove('campo-invalido');
   quantidadeItemInput.classList.remove('campo-invalido');
 
-  const vlUnitario     = parseFloat(produto.vl_venda_produto);
-  const vlTotalItem    = vlUnitario * quantidade;
-  const indexExistente = itensOrcamento.findIndex(function (i) { return i.produtoid === produtoId; });
+  const vlUnitario  = parseFloat(produto.vl_venda_produto);
+  const vlTotalItem = vlUnitario * quantidade;
 
-  if (indexExistente >= 0) {
-    itensOrcamento[indexExistente].quantidade    = quantidade;
-    itensOrcamento[indexExistente].vl_total_item = vlUnitario * quantidade;
-  } else {
-    itensOrcamento.push({
-      produtoid:     produtoId,
-      nome:          produto.ds_produto,
-      descricao:     produto.obs_produto || '—',
-      quantidade:    quantidade,
-      vl_unitario:   vlUnitario,
-      vl_total_item: vlTotalItem
-    });
-  }
+  itensOrcamento = itensOrcamento.concat([{
+    produtoid:     produtoId,
+    nome:          produto.ds_produto,
+    descricao:     produto.obs_produto || '—',
+    quantidade:    quantidade,
+    vl_unitario:   vlUnitario,
+    vl_total_item: vlTotalItem
+  }]);
 
   renderizarTabelaItens();
   recalcularTotalOrcamento();
@@ -342,7 +336,7 @@ async function salvarOrcamento() {
   renderizarTabelaItens();
   recalcularTotalOrcamento();
 
-  if (!blocoListaOrcamentos.classList.contains('elemento-oculto')) {
+  if (secaoListaOrcamentos.style.display === 'block') {
     carregarListaOrcamentos();
   } else {
     listaCarregada = false;
@@ -361,19 +355,20 @@ async function salvarOrcamento() {
   =====================================================
 */
 
-const blocoListaOrcamentos  = document.getElementById('blocoListaOrcamentos');
-const corpoListaOrcamentos  = document.getElementById('corpoListaOrcamentos');
-let   listaCarregada        = false;
+const secaoListaOrcamentos = document.getElementById('secaoListaOrcamentos');
+const corpoListaOrcamentos = document.getElementById('corpoListaOrcamentos');
+let   listaCarregada       = false;
 
 async function toggleListaOrcamentos() {
-  const visivel = !blocoListaOrcamentos.classList.contains('elemento-oculto');
+  const visivel = secaoListaOrcamentos.style.display === 'block';
 
   if (visivel) {
-    blocoListaOrcamentos.classList.add('elemento-oculto');
+    secaoListaOrcamentos.style.display = 'none';
     return;
   }
 
-  blocoListaOrcamentos.classList.remove('elemento-oculto');
+  secaoListaOrcamentos.style.display = 'block';
+  secaoListaOrcamentos.scrollIntoView({ behavior: 'smooth' });
 
   if (!listaCarregada) {
     await carregarListaOrcamentos();
@@ -387,7 +382,7 @@ async function carregarListaOrcamentos() {
   const { data, error } = await supabaseClient
     .from('orcamento')
     .select('orcamentoid, dt_orcamento, dt_validade_orcamento, vl_total_orcamento, cliente(nome_cliente)')
-    .order('orcamentoid', { ascending: true });
+    .order('orcamentoid', { ascending: false });
 
   if (error) {
     corpoListaOrcamentos.innerHTML =
@@ -428,42 +423,10 @@ function renderizarListaOrcamentos(lista) {
       '<td>' + dtVal + '</td>' +
       '<td>' + vlTotal + '</td>' +
       '<td class="acoes-tabela">' +
-        '<button class="btn-editar" onclick="visualizarOrcamento(' + orc.orcamentoid + ')">Visualizar</button>' +
-        '<button class="btn-excluir" onclick="excluirOrcamento(' + orc.orcamentoid + ')">Excluir</button>' +
+        '<button class="btn-editar" onclick="window.location.href=\'orcamento-detalhes.html?id=' + orc.orcamentoid + '\'">Ver</button>' +
       '</td>';
     corpoListaOrcamentos.appendChild(tr);
   });
-}
-
-function visualizarOrcamento(id) {
-  localStorage.setItem('orcamentoSelecionadoId', id);
-  window.location.href = 'orcamento-detalhes.html';
-}
-
-async function excluirOrcamento(id) {
-  if (!confirm('Excluir o orçamento #' + id + '? Esta ação não pode ser desfeita.')) return;
-
-  const { error: errItens } = await supabaseClient
-    .from('orcamento_item')
-    .delete()
-    .eq('orcamentoid', id);
-
-  if (errItens) {
-    alert('Erro ao excluir itens do orçamento: ' + errItens.message);
-    return;
-  }
-
-  const { error: errOrc } = await supabaseClient
-    .from('orcamento')
-    .delete()
-    .eq('orcamentoid', id);
-
-  if (errOrc) {
-    alert('Erro ao excluir orçamento: ' + errOrc.message);
-    return;
-  }
-
-  carregarListaOrcamentos();
 }
 
 /*

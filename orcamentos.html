@@ -134,64 +134,67 @@
         <!-- Coluna direita: Itens do Orçamento + Lista -->
         <div class="orcamento-direita">
 
+          <span class="bloco-titulo">Itens do Orçamento</span>
+
           <div class="bloco-orcamento card-itens-orc">
-            <span class="bloco-titulo">Itens do Orçamento</span>
 
-            <div class="tabela-wrapper">
-              <table class="tabela-dados tabela-itens-orc">
-                <thead>
-                  <tr>
-                    <th>Produto</th>
-                    <th>Descrição</th>
-                    <th>Qtd</th>
-                    <th>Valor Unitário</th>
-                    <th>Valor Total</th>
-                    <th>Ações</th>
-                  </tr>
-                </thead>
-                <tbody id="corpoTabelaItens"></tbody>
-                <tfoot>
-                  <tr class="tfoot-total-row">
-                    <td colspan="3"></td>
-                    <td class="tfoot-label">Valor Total do Orçamento</td>
-                    <td id="valorTotalOrcamento" class="tfoot-total">R$ 0,00</td>
-                    <td></td>
-                  </tr>
-                </tfoot>
-              </table>
+            <div class="card-itens-topo">
+              <div class="tabela-wrapper">
+                <table class="tabela-dados tabela-itens-orc">
+                  <thead>
+                    <tr>
+                      <th>Produto</th>
+                      <th>Descrição</th>
+                      <th>Qtd</th>
+                      <th>Valor Unitário</th>
+                      <th>Valor Total</th>
+                      <th>Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody id="corpoTabelaItens"></tbody>
+                </table>
+              </div>
             </div>
 
-            <div class="form-acoes orcamento-acoes-salvar">
-              <button type="button" class="btn-secundario btn-salvar" onclick="toggleListaOrcamentos()">Exibir Orçamentos</button>
-              <button type="button" class="btn-primary btn-salvar" onclick="salvarOrcamento()">Salvar Orçamento</button>
+            <div class="card-itens-rodape">
+              <div class="total-orcamento">
+                <span class="tfoot-label">Valor Total do Orçamento</span>
+                <span id="valorTotalOrcamento" class="tfoot-total">R$ 0,00</span>
+              </div>
+              <div class="form-acoes orcamento-acoes-salvar">
+                <button type="button" class="btn-secundario btn-salvar" onclick="toggleListaOrcamentos()">Exibir Orçamentos</button>
+                <button type="button" class="btn-primary btn-salvar" onclick="salvarOrcamento()">Salvar Orçamento</button>
+              </div>
             </div>
-          </div>
 
-          <!-- Lista de Orçamentos Cadastrados -->
-          <div id="blocoListaOrcamentos" class="bloco-orcamento bloco-lista-orcamentos card-itens-orc elemento-oculto">
-            <span class="bloco-titulo">Orçamentos Cadastrados</span>
-            <div class="tabela-lista-orc-wrapper">
-              <table class="tabela-dados tabela-lista-orc">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Cliente</th>
-                    <th>Data</th>
-                    <th>Validade</th>
-                    <th>Valor Total</th>
-                    <th>Ações</th>
-                  </tr>
-                </thead>
-                <tbody id="corpoListaOrcamentos">
-                  <tr><td colspan="6" class="tabela-vazia">Carregando...</td></tr>
-                </tbody>
-              </table>
-            </div>
           </div>
 
         </div><!-- /orcamento-direita -->
 
       </div><!-- /orcamento-layout -->
+
+      <div id="secaoListaOrcamentos" style="display:none; margin-top:24px;">
+        <div style="background:#fff; border-radius:6px; padding:0;">
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:16px 20px 12px;">
+            <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#888;">Orçamentos Salvos</span>
+          </div>
+          <table class="tabela-dados tabela-lista-orc" id="tabelaListaOrcamentos">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Cliente</th>
+                <th>Data</th>
+                <th>Validade</th>
+                <th>Valor Total</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="corpoListaOrcamentos">
+              <tr><td colspan="6" class="tabela-vazia">Carregando...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
     </section>
 

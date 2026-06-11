@@ -625,17 +625,26 @@ body.pagina-interna {
 .orcamento-esquerda {
   min-width: 0;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.orcamento-esquerda .bloco-orcamento {
+  margin-bottom: 0;
 }
 
 .orcamento-esquerda .form-cadastro {
   width: 100%;
   max-width: 100%;
+  margin-bottom: 0;
 }
 
 .orcamento-direita {
   min-width: 0;
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 .bloco-orcamento {
@@ -649,7 +658,7 @@ body.pagina-interna {
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: #888;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .input-readonly-display {
@@ -696,9 +705,6 @@ body.pagina-interna {
 
 .orcamento-acoes-salvar {
   max-width: 100%;
-  margin-top: 16px;
-  border-top: 1px solid #f0f0f0;
-  padding-top: 16px;
 }
 
 .bloco-lista-orcamentos {
@@ -709,6 +715,31 @@ body.pagina-interna {
   background: #fff;
   border-radius: 6px;
   padding: 20px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-itens-topo {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card-itens-rodape {
+  border-top: 1px solid #f0f0f0;
+  padding-top: 16px;
+}
+
+.total-orcamento {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f4f0f9;
+  padding: 12px 14px;
+  border-radius: 4px;
+  margin-bottom: 16px;
 }
 
 .tabela-lista-orc-wrapper {
